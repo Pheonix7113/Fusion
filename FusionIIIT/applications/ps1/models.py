@@ -9,16 +9,11 @@ from django.utils import timezone
 class IndentFile(models.Model):
     file_info = models.OneToOneField(File, on_delete=models.CASCADE, primary_key=True)
     indent_name = models.CharField(max_length=250, blank=False, default='Untitled Indent')
-    description = models.TextField(blank=True)  # Description of the indent
-    # in_progress = models.BooleanField(default=True)  # Flag to indicate if the indent is in progress
-    # approved = models.BooleanField(default=False)  # Overall approval status
-    # completed = models.BooleanField(default=False)  # Indicates if the indent is completed
-    
+    description = models.TextField(blank=True)  # Description of the indent   
     head_approval = models.BooleanField(default=False)
     director_approval = models.BooleanField(default=False)
     financial_approval = models.BooleanField(default=False)
     purchased = models.BooleanField(default=False)
-    revised = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'IndentFile'
@@ -41,18 +36,7 @@ class IndentItem(models.Model):
     sources_of_supply = models.CharField(max_length=250)
 
     class Meta:
-        db_table = 'IndentItem'
-
-    def revise_item(self, new_quantity):
-        """ Update quantity and mark item as revised. """
-        self.quantity = new_quantity
-        self.is_revised = True
-        self.indent_file.revised = True  # Mark indent as revised
-        self.indent_file.head_approval = False  # Reset approvals
-        self.indent_file.director_approval = False
-        self.indent_file.financial_approval = False
-        self.indent_file.save()
-        self.save()    
+        db_table = 'IndentItem'   
 
 class Constants:
     Locations = (
